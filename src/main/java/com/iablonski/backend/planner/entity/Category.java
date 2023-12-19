@@ -1,5 +1,7 @@
 package com.iablonski.backend.planner.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.Cache;
@@ -23,6 +25,7 @@ public class Category {
     @Column(name = "uncompleted_count", updatable = false)
     private Long uncompletedCount;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

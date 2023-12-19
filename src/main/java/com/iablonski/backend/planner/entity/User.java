@@ -23,6 +23,6 @@ public class User {
     @Column(name = "userpassword")
     private String password;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
-    private Set<Role> users;
+    @ManyToMany(mappedBy = "users"/*, fetch = FetchType.EAGER*/)
+    private Set<Role> roles;
 }

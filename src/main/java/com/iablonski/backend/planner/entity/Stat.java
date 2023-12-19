@@ -1,5 +1,6 @@
 package com.iablonski.backend.planner.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.Cache;
@@ -21,7 +22,8 @@ public class Stat {
     @Column(name = "uncompleted_total", updatable = false)
     private Long uncompletedTotal;
 
-    @OneToOne
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
