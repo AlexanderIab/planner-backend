@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PriorityServiceImpl implements PriorityService{
@@ -21,23 +22,18 @@ public class PriorityServiceImpl implements PriorityService{
 
 
     @Override
-    public Priority getPriorityById(Long id) {
-        return priorityRepo.findById(id).orElseThrow();
+    public PriorityDTO getPriorityById(Long id) {
+        Priority priority = priorityRepo.findById(id).orElseThrow();
+        return this.toDTO(priority);
     }
 
     @Override
-    public List<Priority> getPrioritiesByUserEmail(String email) {
-        return priorityRepo.findByUserEmailOrderByTitleAsc(email);
-    }
-
-    @Override
-    public Priority addPriority(PriorityDTO priorityDTO) {
+    public void createPriority(PriorityDTO priorityDTO) {
         Priority priority = new Priority();
-        priority.setId(priorityDTO.getId());
         priority.setTitle(priorityDTO.getTitle());
         priority.setColor(priorityDTO.getColor());
         priority.setUser(priorityDTO.getUser());
-        return priorityRepo.save(priority);
+        priorityRepo.save(priority);
     }
 
     @Override
@@ -45,6 +41,7 @@ public class PriorityServiceImpl implements PriorityService{
         Priority priority = priorityRepo.findById(priorityDTO.getId()).orElseThrow();
         priority.setTitle(priorityDTO.getTitle());
         priority.setColor(priorityDTO.getColor());
+        priority.setUser(priorityDTO.getUser());
         priorityRepo.save(priority);
     }
 
@@ -55,7 +52,25 @@ public class PriorityServiceImpl implements PriorityService{
     }
 
     @Override
-    public List<Priority> findByTitle(String title, String email) {
-        return priorityRepo.findByTitle(title, email);
+    public List<PriorityDTO> getPrioritiesByUserEmail(String email) {
+        return priorityRepo.findByUserEmailOrderByTitleAsc(email).stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PriorityDTO> findByTitle(String title, String email) {
+        return priorityRepo.findByTitle(title, email).stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    private PriorityDTO toDTO(Priority priority){
+        return PriorityDTO.builder()
+                .id(priority.getId())
+                .title(priority.getTitle())
+                .color(priority.getColor())
+                .user(priority.getUser())
+                .build();
     }
 }

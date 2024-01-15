@@ -1,7 +1,7 @@
 package com.iablonski.backend.planner.service;
 
-import com.iablonski.backend.planner.entity.Stat;
+import com.iablonski.backend.planner.dto.StatDTO;
 
 public interface StatService {
-    Stat findStat(String email);
+    StatDTO findStat(String email);
 }

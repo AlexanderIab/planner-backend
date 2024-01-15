@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
@@ -19,28 +20,24 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public Category getCategoryById(Long id) {
-        return categoryRepo.findById(id).orElseThrow();
+    public CategoryDTO getCategoryById(Long id) {
+        Category category = categoryRepo.findById(id).orElseThrow();
+        return this.toDTO(category);
     }
 
     @Override
-    public List<Category> getCategoriesByUserEmail(String email) {
-        return categoryRepo.findByUserEmailOrderByTitleAsc(email);
-    }
-
-    @Override
-    public Category addCategory(CategoryDTO categoryDTO) {
+    public void createCategory(CategoryDTO categoryDTO) {
         Category category = new Category();
-        category.setTitle(categoryDTO.getTitle());
+        category.setTitle(category.getTitle());
         category.setUser(categoryDTO.getUser());
-        return categoryRepo.save(category);
+        categoryRepo.save(category);
     }
 
     @Override
     public void updateCategory(CategoryDTO categoryDTO) {
         Category category = categoryRepo.findById(categoryDTO.getId()).orElseThrow();
         category.setTitle(categoryDTO.getTitle());
-//        category.setUser(categoryDTO.getUser());
+        category.setUser(categoryDTO.getUser());
         categoryRepo.save(category);
     }
 
@@ -51,7 +48,26 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public List<Category> findByTitle(String title, String email) {
-        return categoryRepo.findByTitle(title, email);
+    public List<CategoryDTO> getCategoriesByUserEmail(String email) {
+        return categoryRepo.findByUserEmailOrderByTitleAsc(email).stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CategoryDTO> findByTitle(String title, String email) {
+        return categoryRepo.findByTitle(title, email).stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    private CategoryDTO toDTO(Category category){
+        return CategoryDTO.builder()
+                .id(category.getId())
+                .title(category.getTitle())
+                .completedCount(category.getCompletedCount())
+                .uncompletedCount(category.getUncompletedCount())
+                .user(category.getUser())
+                .build();
     }
 }

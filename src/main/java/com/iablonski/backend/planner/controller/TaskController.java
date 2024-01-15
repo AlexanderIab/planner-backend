@@ -2,6 +2,7 @@ package com.iablonski.backend.planner.controller;
 
 import com.iablonski.backend.planner.dto.TaskDTO;
 import com.iablonski.backend.planner.entity.Task;
+import com.iablonski.backend.planner.payload.response.MessageResponse;
 import com.iablonski.backend.planner.search.TaskSearchValues;
 import com.iablonski.backend.planner.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/task")
 public class TaskController {
-
     public static final String ID_COLUMN = "id";
     private final TaskService taskService;
 
@@ -27,30 +27,32 @@ public class TaskController {
     }
 
     @PostMapping("/id")
-    public ResponseEntity<Task> getTaskById(@RequestBody Long id){
+    public ResponseEntity<TaskDTO> getTaskById(@RequestBody Long id){
         return new ResponseEntity<>(taskService.getTaskById(id), HttpStatus.OK);
     }
 
     @PostMapping("/all")
-    public List<Task> getTasksByUserEmail(@RequestBody String email){
-        return taskService.getTasksByUserEmail(email);
+    public ResponseEntity<List<TaskDTO>> getTasksByUserEmail(@RequestBody String email){
+        List<TaskDTO> tasks = taskService.getTasksByUserEmail(email);
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Task> addTask(@RequestBody TaskDTO taskDTO){
-        return new ResponseEntity<>(taskService.addTask(taskDTO), HttpStatus.OK);
+    public ResponseEntity<MessageResponse> createTask(@RequestBody TaskDTO taskDTO){
+        taskService.createTask(taskDTO);
+        return new ResponseEntity<>(new MessageResponse("Successfully created"), HttpStatus.OK);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Task> updateTask(@RequestBody TaskDTO taskDTO){
+    public ResponseEntity<MessageResponse> updateTask(@RequestBody TaskDTO taskDTO){
         taskService.updateTask(taskDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse("Successfully updated"), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Task> deleteTask(@PathVariable("id") Long id){
+    public ResponseEntity<MessageResponse> deleteTask(@PathVariable("id") Long id){
         taskService.deleteTaskById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse("Successfully deleted"), HttpStatus.OK);
     }
 
     @PostMapping("/search")

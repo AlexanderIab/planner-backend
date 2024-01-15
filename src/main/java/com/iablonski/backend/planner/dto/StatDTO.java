@@ -2,16 +2,11 @@ package com.iablonski.backend.planner.dto;
 
 import com.iablonski.backend.planner.entity.User;
 import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Builder
-@Setter
-@Getter
-public class PriorityDTO {
+public class StatDTO {
     private Long id;
-    private String title;
-    private String color;
+    private Long completedTotal;
+    private Long uncompletedTotal;
     private User user;
 }

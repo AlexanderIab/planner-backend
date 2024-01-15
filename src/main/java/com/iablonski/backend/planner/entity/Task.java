@@ -3,7 +3,7 @@ package com.iablonski.backend.planner.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.type.NumericBooleanConverter;
@@ -12,7 +12,10 @@ import java.util.Date;
 
 @Entity
 @Table(name = "task", schema = "todolist", catalog = "planner")
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Task {

@@ -1,9 +1,17 @@
 spring:
+#  cache:
+#    jcache:
+#      config: ehcache-conf.xml
   jpa:
     properties:
       hibernate:
         default_schema: todolist
         format_sql: true
+        cache:
+          use_second_level_cache: true
+          region:
+            factory_class: org.hibernate.cache.jcache.internal.JCacheRegionFactory
+#            provider_configuration_file_resource_path: ehcache-conf.xml
     show-sql: true
   datasource:
     url: jdbc:postgresql://localhost:5432/planner
@@ -13,4 +21,7 @@ logging:
   level:
     org.hibernate.type.descriptor.sql: trace
     org.springframework: info
+    org.ehcache: info
+    org.springframework.cache: trace
+
 #    root: error

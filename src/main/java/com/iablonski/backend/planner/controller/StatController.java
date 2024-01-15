@@ -1,6 +1,6 @@
 package com.iablonski.backend.planner.controller;
 
-import com.iablonski.backend.planner.entity.Stat;
+import com.iablonski.backend.planner.dto.StatDTO;
 import com.iablonski.backend.planner.service.StatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,8 +22,7 @@ public class StatController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<Stat> findStat(@RequestBody String email){
-        Stat stat= statService.findStat(email);
-        return new ResponseEntity<>(stat, HttpStatus.OK);
+    public ResponseEntity<StatDTO> findStat(@RequestBody String email){
+        return new ResponseEntity<>(statService.findStat(email), HttpStatus.OK);
     }
 }
