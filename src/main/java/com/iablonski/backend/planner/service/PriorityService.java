@@ -1,7 +1,6 @@
 package com.iablonski.backend.planner.service;
 
 import com.iablonski.backend.planner.dto.PriorityDTO;
-import com.iablonski.backend.planner.entity.Priority;
 
 import java.util.List;
 

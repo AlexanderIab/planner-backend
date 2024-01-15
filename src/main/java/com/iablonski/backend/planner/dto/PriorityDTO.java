@@ -2,7 +2,6 @@ package com.iablonski.backend.planner.dto;
 
 import com.iablonski.backend.planner.entity.User;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
